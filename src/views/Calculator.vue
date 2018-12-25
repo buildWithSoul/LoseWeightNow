@@ -341,7 +341,7 @@ export default {
       const GENDER = this.chosenGender;
 
       const AGE_IN_YEARS = parseInt(this.age);
-      const HEIGHT_IN_INCHES = parseInt(this.feet) + parseInt(this.inches);
+      const HEIGHT_IN_INCHES = parseInt(this.feet) * 12 + parseInt(this.inches);
 
       const WEIGHT_IN_KG = WEIGHT_IN_LBS / 2.2;
 
