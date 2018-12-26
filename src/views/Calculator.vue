@@ -151,9 +151,7 @@
           <p> Your biosystem uses about {{resultTotalCalories}} calories daily </p>
           <p> We recommend eating between {{resultsMinCalories}} and {{resultsMaxCalories}} per day </p>
 
-          <p> On a {{motivation}} lifestyle, this means <p>
-            <p> {{dailyJunkMin}} to {{dailyJunkMax}} calories of junk food per day </p>
-            <p> {{dailyFreshMin}} to {{dailyFreshMax}} calories of clean food per day </p>
+          <p> On a {{motivation}} lifestyle, this means you are eating {{dailyJunkMin}} to {{dailyJunkMax}} calories of junk food per day and {{dailyFreshMin}} to {{dailyFreshMax}} calories of clean food per day </p>
 
         </div>
 
@@ -165,16 +163,26 @@
     <h3 v-if="showError"> {{errorMessage}} </h3>
 
     <div class="button-container">
-  <Button type="primary" round v-if="active > 0" v-on:click="previous"> Previous </Button>
+  <Button type="primary" round v-if="active > 0 && active < 4" v-on:click="previous"> Previous </Button>
 
     <Button type="primary" round v-if="active < 3" v-on:click="next"> Next </Button>
     <Button type="primary" round v-if="active === 3" v-on:click="calculate"> Calculate </Button>
 
-    <div v-if="active === 4">
-      <Button type="primary" round> Discover meal options </Button>
-      <Button type="primary" round> Join activity groups </Button>
+    <span v-if="active === 4">
+      <row>
+      <h3> Thanks for holding up your end. As we said, we will now extend an invite into our community </h3>
+      <col :xs="12" :mid="6">
 
+          <el-input v-model="email" size="medium" class="emailInput" type="email" placeholder="Enter your email and we will"></el-input>
+        </col>
+        <Button type="primary" round> Send the Invite </Button>
+      </h3>
+    </row>
+    <div>
+      <el-checkbox v-model="checked">Also Save this into a profile</el-checkbox>
     </div>
+    </span>
+
   </div>
   </row>
 
@@ -184,6 +192,11 @@
 <style>
 .calculator-root {
   margin: auto;
+}
+
+.emailInput {
+  max-width: 20rem;
+  padding-right: 2.15rem;
 }
 
 .hidden {
@@ -201,9 +214,11 @@ import {
   Button,
   Row,
   Col,
+  Checkbox,
   Steps,
   Step,
   Radio,
+  Input,
   InputNumber,
   Popover
 } from "element-ui";
@@ -219,17 +234,19 @@ export default {
     row: Row,
     Col: Col,
     Button: Button,
+    "el-checkbox": Checkbox,
     "el-radio": Radio,
     "el-steps": Steps,
     "el-step": Step,
     "el-popover": Popover,
     "el-input-number": InputNumber,
-    CalculatorMethod: CalculatorMethod
+    CalculatorMethod: CalculatorMethod,
+    "el-input": Input
   },
   data() {
     return {
       active: 0,
-      weight: 0,
+      weight: 100,
       percentFat: null,
       age: null,
       feet: null,
@@ -240,9 +257,9 @@ export default {
       cheat: null,
       motivation: null,
       calories: null,
-      fats: null,
-      carbs: null,
-      protein: null,
+      fats: 98,
+      carbs: 1,
+      protein: 1,
       showError: false,
       errorMessage: null,
       resultTotalCalories: 0,

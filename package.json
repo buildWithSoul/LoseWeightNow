@@ -12,8 +12,10 @@
   "dependencies": {
     "element-ui": "^2.4.11",
     "vue": "^2.5.17",
+    "vue-parallaxy": "^1.1.1",
     "vue-popperjs": "^1.6.3",
     "vue-router": "^3.0.1",
+    "vue-scrollto": "^2.13.0",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
