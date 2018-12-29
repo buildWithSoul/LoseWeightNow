@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">LoseWeight2019</router-link> |
-      <router-link to="/about">About</router-link> |
-      <router-link to="/lose-weight-now">Plan Now</router-link>
+      <router-link class="green" to="/">Weight Loss Year</router-link> |
+      <router-link class="green" to="/lose-weight-now">Plan Now</router-link> |
+      <router-link class="green" to="/about">About</router-link>
 
     </div>
     <router-view/>
@@ -11,6 +11,9 @@
 </template>
 
 <style lang="scss">
+.green {
+  color: #67c23a;
+}
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -24,7 +27,7 @@
     font-weight: bold;
     color: #2c3e50;
     &.router-link-exact-active {
-      color: #42b983;
+      color: #67c23a;
     }
   }
 }

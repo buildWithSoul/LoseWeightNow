@@ -1,14 +1,16 @@
 <template>
   <div class="calculator-root">
-    <h2 v-if="chosenMethod"> Calculating Using {{chosenMethod}} Equation</h2>
-    <h2 v-else> Weight Loss Calculator </h2>
+    <div v-if="chosenMethod">
+      <h2 v-if="active === 0"> Calculating Using {{chosenMethod}} Equation </h2>
+      <h2 v-else> Calculating Your #WeightLossYear Diet Plan.. </h2>
+    </div>
+    <h2 v-else> Weight Loss Year Diet Planner </h2>
     <row>
       <el-steps :active="active" finish-status="success" align-center>
         <el-step title="Method"></el-step>
         <el-step title="BioMetrics"></el-step>
         <el-step title="Lifestyle"></el-step>
         <el-step title="Motivation"></el-step>
-        <el-step title="Results"></el-step>
       </el-steps>
     </row>
   <row>
@@ -17,24 +19,28 @@
         <div>
           <h3> Choose your method of calorie calculation </h3>
         </div>
-        <div class="methods">
-          <el-radio v-model="chosenMethod" label="Basic" border>Basic</el-radio>
+        <row class="methods">
+          <div>
+            <el-radio v-model="chosenMethod" label="Basic" border>Basic</el-radio>
+            <el-popover
+              placement="top-start"
+              title="You need a health scale for this"
+              width="300"
+              trigger="hover" >
+            <el-radio v-model="chosenMethod" label="Katch McArdle" slot="reference" border>KM</el-radio>
+          </el-popover>
           <el-popover
             placement="top-start"
-            title="Based on the Katch McArdle Equation"
+            title="You need a health scale for this"
             width="300"
-            trigger="hover">
-          <el-radio v-model="chosenMethod" label="Katch McArdle" slot="reference" border>KM</el-radio>
-        </el-popover>
-        <el-popover
-          placement="top-start"
-          title="Based on the Mifflin-St Jeor Equation"
-          width="300"
-          trigger="hover">
-          <el-radio v-model="chosenMethod" slot="reference" label="Mifflin-St Jeor" border>Mifflin</el-radio>
-        </el-popover>
-
+            trigger="hover" >
+            <el-radio v-model="chosenMethod" slot="reference" label="Mifflin-St Jeor" border>Mifflin</el-radio>
+          </el-popover>
         </div>
+          <Col>
+            <div v-html="chosenMethodDetails"></div>
+          </Col>
+      </row>
       </div>
 
       <p class="hidden"> <CalculatorMethod :chosenMethod="chosenMethod" v-on:chooseMethod="chooseMethod"/> </p>
@@ -53,7 +59,8 @@
         </Col>
 
         <Col :xs="24" :md="12">
-          <h3> Gender </h3>  <p> Hint: If you were born with balls, you are Male. </p>
+          <h3> Gender </h3>
+          <br/>
           <el-radio v-model="chosenGender" label="Male" border>Male</el-radio>
           <el-radio v-model="chosenGender" label="Female" border>Female</el-radio>
         </Col>
@@ -139,47 +146,56 @@
           <el-radio v-model="motivation" label="Aggressive" border>Aggressive</el-radio>
         </div>
         <h3> Cheat Frequencies </h3>
-        <el-radio v-model="cheat" label="Daily" border>A Litle Every Day</el-radio>
+        <el-radio v-model="cheat" label="Daily" border>A Little Every Day</el-radio>
         <el-radio v-model="cheat" label="OnceAWeek" border>One Big Day</el-radio>
 
      </div>
     <div v-if="active === 4">
         <div>
-            <h2> Results Are In! </h2>
+            <h2>The results Are In! </h2>
+            <br/>
         </div>
         <div>
-          <p> Your biosystem uses about {{resultTotalCalories}} calories daily </p>
-          <p> We recommend eating between {{resultsMinCalories}} and {{resultsMaxCalories}} per day </p>
+          <p> You use about <b> {{resultTotalCalories}}  calories </b>daily </p>
+          <p> We recommend eating between <b>  {{resultsMinCalories}} and {{resultsMaxCalories}} per day </b> to lose weight</p>
 
-          <p> On a {{motivation}} lifestyle, this means you are eating {{dailyJunkMin}} to {{dailyJunkMax}} calories of junk food per day and {{dailyFreshMin}} to {{dailyFreshMax}} calories of clean food per day </p>
+          <p> Leading a {{motivationComputed()}} lifestyle, you are eating {{dailyJunkMin}} to {{dailyJunkMax}} calories of junk food per day and {{dailyFreshMin}} to {{dailyFreshMax}} calories of clean food per day </p>
+
+          <a href="#" class="bolder" v-on:click="previous"> Need to change something? </a>
 
         </div>
 
     </div>
 
+   <div v-if="active === 5">
+        <div>
+          <h2> Congrats! </h2>
+          <p> Your invitation has been sent! We look forward to having you in our community. </p>
+          <h3 > Let's all make 2019 a  <span class="bolder"> #WeightLossYear </span> </h3>
+        </div>
+      </div>
   </row>
 
   <row>
     <h3 v-if="showError"> {{errorMessage}} </h3>
 
     <div class="button-container">
-  <Button type="primary" round v-if="active > 0 && active < 4" v-on:click="previous"> Previous </Button>
+  <Button type="success" plain  round v-if="active > 0 && active < 4" v-on:click="previous"> Previous </Button>
 
-    <Button type="primary" round v-if="active < 3" v-on:click="next"> Next </Button>
-    <Button type="primary" round v-if="active === 3" v-on:click="calculate"> Calculate </Button>
+    <Button type="success" plain  round v-if="active < 3" v-on:click="next"> Next </Button>
+    <Button type="success" plain  round v-if="active === 3" v-on:click="calculate"> Calculate </Button>
 
     <span v-if="active === 4">
       <row>
-      <h3> Thanks for holding up your end. As we said, we will now extend an invite into our community </h3>
-      <col :xs="12" :mid="6">
+      <h3> Thanks for holding up your end. As we said, we will now extend an invite into our community: </h3>
+      <Col :xs="12" :mid="6">
 
           <el-input v-model="email" size="medium" class="emailInput" type="email" placeholder="Enter your email and we will"></el-input>
-        </col>
-        <Button type="primary" round> Send the Invite </Button>
-      </h3>
+        </Col>
+        <Button type="success" v-on:click="finish" plain  round> Send the Invite </Button>
     </row>
     <div>
-      <el-checkbox v-model="checked">Also Save this into a profile</el-checkbox>
+      <el-checkbox v-model="checked">Also save and share these results with me</el-checkbox>
     </div>
     </span>
 
@@ -190,6 +206,12 @@
 </template>
 
 <style>
+.bolder {
+  color: #67c23a;
+}
+.methodChooser {
+  margin-top: 2rem;
+}
 .calculator-root {
   margin: auto;
 }
@@ -223,10 +245,12 @@ import {
   Popover
 } from "element-ui";
 import CalculatorMethod from "../components/Calculator_Method";
-
+import URI from "../env.js";
+/*
 const ENJOYABLE = "Enjoyable";
 const BALANCED = "Balanced";
 const AGGRESSIVE = "Aggressive";
+*/
 
 export default {
   name: "Calculator",
@@ -257,8 +281,8 @@ export default {
       cheat: null,
       motivation: null,
       calories: null,
-      fats: 98,
-      carbs: 1,
+      fats: 1,
+      carbs: 98,
       protein: 1,
       showError: false,
       errorMessage: null,
@@ -268,8 +292,25 @@ export default {
       dailyJunkMax: 0,
       dailyJunkMin: 0,
       dailyCleanMax: 0,
-      dailyCleanMin: 0
+      dailyCleanMin: 0,
+      checked: true,
+      email: null
     };
+  },
+  computed: {
+    chosenMethodDetails() {
+      switch (this.chosenMethod) {
+        case "Basic":
+          return "<div class='methodChooser'> The path of least resistance. Calculates off bodyweight. </div>";
+        case "Katch McArdle":
+          return "<div class='methodChooser'> A powerful equation that utilizes lean body mass to calculate your calorie needs.</div>";
+        case "Mifflin-St Jeor":
+          return "<div class='methodChooser'> A powerful equation that utilizes weight gender and age to calculate your calorie needs </div>";
+
+        default:
+          return "<div class='methodChooser'> If you do not have access to a scale, please click on Basic </div>";
+      }
+    }
   },
   methods: {
     next() {
@@ -278,6 +319,10 @@ export default {
         this.showError = false;
         this.errorMessage = null;
       }
+    },
+    motivationComputed() {
+      let newMo = this.motivation.toLowerCase();
+      return newMo;
     },
     validate() {
       switch (this.active) {
@@ -343,8 +388,6 @@ export default {
               "We gotta add all of this info before we move forward";
             return false;
           }
-        case 4:
-          calculate();
       }
     },
     previous() {
@@ -448,7 +491,36 @@ export default {
       this.active++;
     },
     finish() {
-      return 0;
+      // get the ref
+      // get the checkbox
+      // call the URI
+
+      var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if (re.test(this.email)) {
+        this.showError = false;
+        this.errorMessage = "";
+        const sendThis = {
+          email: this.email,
+          checked: this.checked
+        };
+
+        console.log(process.env);
+        console.log(URI);
+        // mode: "cors", // no-cors, cors, *same-origin
+        fetch(`${URI}/preregister`, {
+          method: "POST", // *GET, POST, PUT, DELETE, etc.
+          headers: {
+            "Content-Type": "application/json"
+            // "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: JSON.stringify(sendThis) // body data type must match "Content-Type" header
+        }).then(response => response.json());
+        this.active++;
+        //      fetch(``);
+      } else {
+        this.showError = true;
+        this.errorMessage = "We gotta add a valid email!";
+      }
     },
     chooseMethod(value) {
       this.$data.chosenMethod = value;
