@@ -1,5 +1,5 @@
 <template>
-  <el-container style="height: 500px; border: 1px solid #eee">
+  <el-container style="">
     <HelloWorld />
 </el-container>
 </template>
