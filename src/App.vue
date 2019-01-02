@@ -32,11 +32,11 @@ body{
 }
 .menu {
   float: right;
-  margin-top: 35px;
+  margin-top: 38px;
 }
 .logo{
   text-align: left;
-  margin: 12px;
+  margin: 10px;
 }
 .green {
   color: #67c23a;
@@ -66,8 +66,13 @@ body{
   }
 }
 #footer{
-  padding: 20px;
+  padding: 35px 20px;
   background: #2e8e48;
   color: #fff;
+}
+.header_section{
+    border-bottom: 1px solid #ece8e8;
+    -webkit-box-shadow: 0px 6px 11px -10px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 6px 11px -10px rgba(0, 0, 0, 0.75); 
 }
 </style>

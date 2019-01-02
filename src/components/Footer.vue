@@ -5,7 +5,7 @@
                 <el-col :xs="24" :lg="24">
                     <div id="footer">                        
                         <div class="copywrite">
-                            © Copyright 2019 Best Diet, Inc. - All rights reserved.
+                            © Copyright 2019 Weight Loss Year. - All rights reserved.
                         </div>                        
                     </div>
                 </el-col>
