@@ -1,10 +1,15 @@
 <template>
   <div class="calculator-root">
+    <el-main>
+    <div class="banner">
+      <h1 class="title">Year Diet Planner</h1>
+    </div>
+  </el-main>
     <div v-if="chosenMethod">
       <h2 v-if="active === 0"> Calculating Using {{chosenMethod}} Equation </h2>
       <h2 v-else> Calculating Your #WeightLossYear Diet Plan.. </h2>
     </div>
-    <h2 v-else> Weight Loss Year Diet Planner </h2>
+    <h2 v-else class="weight-loss-heading"> Weight Loss Year Diet Planner </h2>
     <row>
       <el-steps :active="active" finish-status="success" align-center>
         <el-step title="Method"></el-step>
@@ -228,6 +233,32 @@
 .button-container {
   margin-top: 1.5rem;
 }
+.calculator-root .el-main{
+    background-image: url('../assets/last-bg.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    height: 230px;
+  }
+  .banner{
+    position: relative;
+    height: 150px;
+  }
+  .title{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    color: #fff;
+    letter-spacing: 0.9px;
+  }
+  .calculator-root{
+    padding-bottom: 25px;
+  }
+  .weight-loss-heading{
+    padding-top: 30px;
+  }
 </style>
 
 <script>
