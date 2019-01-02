@@ -38,7 +38,7 @@
     </Col>
     <Col :xs="24" :lg="12">
       <div class="hero">
-        <img src="../assets/before-after.jpg" alt="Before after">
+        <img src="../assets/before-after1.jpg" alt="Before after">
       </div>
     </Col>
   </Row> </el-main>
@@ -109,7 +109,7 @@ p{
   line-height: 28px;
 }
 .first-bg{ 
-	background-image: url('../assets/bg-image.jpg');
+	background-image: url('../assets/bg-image-1.jpg');
     background-repeat: no-repeat;
     background-size: cover;
 	}
