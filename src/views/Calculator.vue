@@ -2,14 +2,17 @@
   <div class="calculator-root">
     <el-main>
     <div class="banner">
-      <h1 class="title">Year Diet Planner</h1>
+      <div v-if="chosenMethod">
+        <h1 class="title" v-if="active === 0"> Calculating Using {{chosenMethod}} Equation </h1>
+        <span v-else>
+
+        <h1 class=" title" v-if="active === 4"> The results Are In! </h1>
+        <h1 class="title" v-else-if="active === 5"> Congrats! </h1>
+        <h1 class="title" v-else> Calculating Your Weight Loss Plan.. </h1>
+      </span>
+      </div>
+      <h1 v-else class="weight-loss-heading title"> Weight Loss Planner </h1>
     </div>
-  </el-main>
-    <div v-if="chosenMethod">
-      <h2 v-if="active === 0"> Calculating Using {{chosenMethod}} Equation </h2>
-      <h2 v-else> Calculating Your #WeightLossYear Diet Plan.. </h2>
-    </div>
-    <h2 v-else class="weight-loss-heading"> Weight Loss Year Diet Planner </h2>
     <row>
       <el-steps :active="active" finish-status="success" align-center>
         <el-step title="Method"></el-step>
@@ -18,6 +21,9 @@
         <el-step title="Motivation"></el-step>
       </el-steps>
     </row>
+
+  </el-main>
+
   <row>
     <div v-if="active === 0">
       <div class="method-container">
@@ -144,6 +150,7 @@
       </div>
      </div>
     <div v-if="active === 3">
+      <div class="method-container">
         <h3> Motivation </h3>
         <div class="methods">
           <el-radio v-model="motivation" label="Enjoyable" border>Enjoyable</el-radio>
@@ -153,14 +160,10 @@
         <h3> Cheat Frequencies </h3>
         <el-radio v-model="cheat" label="Daily" border>A Little Every Day</el-radio>
         <el-radio v-model="cheat" label="OnceAWeek" border>One Big Day</el-radio>
-
+      </div>
      </div>
     <div v-if="active === 4">
-        <div>
-            <h2>The results Are In! </h2>
-            <br/>
-        </div>
-        <div>
+        <div class="method-container">
           <p> You use about <b> {{resultTotalCalories}}  calories </b>daily </p>
           <p> We recommend eating between <b>  {{resultsMinCalories}} and {{resultsMaxCalories}} per day </b> to lose weight</p>
 
@@ -173,8 +176,7 @@
     </div>
 
    <div v-if="active === 5">
-        <div>
-          <h2> Congrats! </h2>
+        <div class="method-container">
           <p> Your invitation has been sent! We look forward to having you in our community. </p>
           <h3 > Let's all make 2019 a  <span class="bolder"> #WeightLossYear </span> </h3>
         </div>
@@ -211,6 +213,10 @@
 </template>
 
 <style>
+.el-step__title.is-process,
+.el-step__title.is-wait {
+  color: white !important;
+}
 .bolder {
   color: #67c23a;
 }
@@ -233,32 +239,36 @@
 .button-container {
   margin-top: 1.5rem;
 }
-.calculator-root .el-main{
-    background-image: url('../assets/last-bg.jpg');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-attachment: fixed;
-    background-position: center;
-    height: 230px;
-  }
-  .banner{
-    position: relative;
-    height: 150px;
-  }
-  .title{
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 100%;
-    color: #fff;
-    letter-spacing: 0.9px;
-  }
-  .calculator-root{
-    padding-bottom: 25px;
-  }
-  .weight-loss-heading{
-    padding-top: 30px;
-  }
+.calculator-root .el-main {
+  background-image: url("../assets/last-bg.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  height: 230px;
+}
+.banner {
+  position: relative;
+  height: 150px;
+}
+.title {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  color: #fff;
+  letter-spacing: 0.9px;
+}
+.calculator-root {
+  padding-bottom: 25px;
+}
+.weight-loss-heading {
+  padding-top: 30px;
+}
+
+.method-container {
+  padding: 2rem 0;
+}
 </style>
 
 <script>
@@ -532,11 +542,34 @@ export default {
         this.errorMessage = "";
         const sendThis = {
           email: this.email,
-          checked: this.checked
+          checked: this.checked,
+          raw: {
+            weight: this.weight,
+            percentFat: this.percentFat,
+            age: this.age,
+            feet: this.feet,
+            inches: this.inches,
+            chosenMethod: this.chosenMethod,
+            chosenGender: this.chosenGender,
+            activityMultiplier: this.activityMultiplier,
+            cheat: this.cheat,
+            motivation: this.motivation,
+            calories: this.calories,
+            fats: this.fats,
+            carbs: this.carbs,
+            protein: this.protein
+          },
+          results: {
+            resultTotalCalories: this.resultTotalCalories,
+            resultsMinCalories: this.resultsMinCalories,
+            resultsMaxCalories: this.resultsMaxCalories,
+            dailyJunkMax: this.dailyJunkMax,
+            dailyJunkMin: this.dailyJunkMin,
+            dailyCleanMax: this.dailyCleanMax,
+            dailyCleanMin: this.dailyCleanMin
+          }
         };
 
-        console.log(process.env);
-        console.log(URI);
         // mode: "cors", // no-cors, cors, *same-origin
         fetch(`${URI}/preregister`, {
           method: "POST", // *GET, POST, PUT, DELETE, etc.
